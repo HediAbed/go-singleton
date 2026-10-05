@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"sync"
 )
 
 // DatabaseConnection is the struct we want to make a singleton
@@ -22,9 +23,6 @@ func (dbc *DatabaseConnection) SetServer(ip string, port int) {
 }
 
 // The db connection instance
-var dbConnection *DatabaseConnection
-
-
-func getDatabaseConnectionInstance() *DatabaseConnection {
-	return dbConnection
-}
+var getDatabaseConnectionInstance = sync.OnceValue(func() *DatabaseConnection {
+	return &DatabaseConnection{}
+})
